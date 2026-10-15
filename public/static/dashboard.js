@@ -1,6 +1,6 @@
 const moneyFull = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
 const numberFull = new Intl.NumberFormat('ko-KR');
-const colors = { blue: '#5f85e9', orange: '#ed8062', green: '#24a88b', grid: '#edf0f4', text: '#8995a5' };
+const colors = { blue: '#c8f169', orange: '#ff906d', green: '#59d8b2', grid: '#2b3939', text: '#98a8a1' };
 let data;
 let trendChart;
 let elementChart;
@@ -130,15 +130,15 @@ function renderTrend() {
     data: {
       labels,
       datasets: [
-        ...(hasPreviousYear ? [{ label: `${previousYear}년`, data: previousValues, borderColor: '#aeb9c9', backgroundColor: '#aeb9c9', borderWidth: 2, pointRadius: labels.map((_, i) => i === selected ? 4 : 2.5), pointHoverRadius: 5, pointBackgroundColor: '#fff', pointBorderWidth: 2, tension: .34 }] : []),
+        ...(hasPreviousYear ? [{ label: `${previousYear}년`, data: previousValues, borderColor: '#71847e', backgroundColor: '#71847e', borderWidth: 2, pointRadius: labels.map((_, i) => i === selected ? 4 : 2.5), pointHoverRadius: 5, pointBackgroundColor: '#fff', pointBorderWidth: 2, tension: .34 }] : []),
         { label: `${activeFilter.year}년`, data: currentValues, borderColor: colors.blue, backgroundColor: colors.blue, borderWidth: 2.5, pointRadius: labels.map((_, i) => i === selected ? 5 : 3), pointHoverRadius: 6, pointBackgroundColor: '#fff', pointBorderWidth: 2.5, tension: .34 }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { position: 'bottom', align: 'start', labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 7, boxHeight: 7, padding: 17, color: '#728095', font: { family: "'DM Sans','Noto Sans KR',sans-serif", size: 10 } } },
-        tooltip: { backgroundColor: '#1e2b40', titleFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, bodyFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, padding: 11, callbacks: { title: (items) => `${items[0].label} ${monthTitle(activeFilter.month) === items[0].label ? '선택' : ''}`, label: (item) => `${item.dataset.label} · ${formatFull(item.raw)}`, footer: (items) => { const values = items.map((item) => item.raw); return values.length === 2 ? `전년 대비 ${values[1] - values[0] >= 0 ? '+' : '−'}${formatFull(Math.abs(values[1] - values[0]))}` : ''; } } }
+        legend: { position: 'bottom', align: 'start', labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 7, boxHeight: 7, padding: 17, color: '#a1b0aa', font: { family: "'DM Sans','Noto Sans KR',sans-serif", size: 10 } } },
+        tooltip: { backgroundColor: '#0c1314', titleFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, bodyFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, padding: 11, callbacks: { title: (items) => `${items[0].label} ${monthTitle(activeFilter.month) === items[0].label ? '선택' : ''}`, label: (item) => `${item.dataset.label} · ${formatFull(item.raw)}`, footer: (items) => { const values = items.map((item) => item.raw); return values.length === 2 ? `전년 대비 ${values[1] - values[0] >= 0 ? '+' : '−'}${formatFull(Math.abs(values[1] - values[0]))}` : ''; } } }
       },
       scales: {
         x: { grid: { display: false }, border: { display: false }, ticks: { color: colors.text, font: { size: 9 } } },
@@ -190,7 +190,7 @@ function renderElementChart(items) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#1e2b40', titleFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, bodyFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, footerFont: { family: "'Noto Sans KR',sans-serif", size: 9 }, padding: 11,
+          backgroundColor: '#0c1314', titleFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, bodyFont: { family: "'Noto Sans KR',sans-serif", size: 10 }, footerFont: { family: "'Noto Sans KR',sans-serif", size: 9 }, padding: 11,
           callbacks: {
             title: (items) => items[0].label,
             label: (context) => { const delta = context.raw; const item = chartItems[context.dataIndex]; return item.status === 'unknown' ? '비교 자료 없음' : `${delta > 0 ? '증가' : delta < 0 ? '감소' : '변동 없음'} · ${formatFull(Math.abs(delta))}${item.status === 'new' ? ' (신규)' : item.status === 'unused' ? ' (미사용)' : ''}`; },
@@ -200,7 +200,7 @@ function renderElementChart(items) {
       },
       scales: {
         x: { grid: { color: colors.grid, drawTicks: false }, border: { display: false }, ticks: { color: colors.text, font: { size: 8 }, padding: 7, callback: (value) => formatShort(value) } },
-        y: { grid: { display: false }, border: { display: false }, ticks: { color: '#667487', font: { family: "'Noto Sans KR',sans-serif", size: 8 }, padding: 7, autoSkip: false } }
+        y: { grid: { display: false }, border: { display: false }, ticks: { color: '#aab8b2', font: { family: "'Noto Sans KR',sans-serif", size: 8 }, padding: 7, autoSkip: false } }
       }
     }
   });
