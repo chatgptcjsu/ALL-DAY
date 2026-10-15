@@ -110,6 +110,8 @@ function updateMetrics(elements) {
   byId('metric-previous-year').textContent = hasPreviousYear ? `${activeFilter.year - 1}년 대비` : `${activeFilter.year - 1}년 데이터 없음`;
   byId('metric-new-elements').textContent = newCount === null ? '—' : numberFull.format(newCount);
   byId('metric-unused-elements').textContent = unusedCount === null ? '—' : numberFull.format(unusedCount);
+  const excluded = data.excluded || { count: 0, amount: 0, missingElementCount: 0, missingCostCenterCount: 0 };
+  byId('excluded-note').textContent = excluded.count ? `전체 기간: 계정명 공란 ${numberFull.format(excluded.missingElementCount)}건 · ${formatFull(excluded.amount)} 제외 (코스트센터 공란 ${numberFull.format(excluded.missingCostCenterCount)}건 포함)` : '';
   byId('trend-subtitle').textContent = `${activeFilter.center === 'all' ? '전체 코스트센터' : activeFilter.center} · 월별 합계 · ${monthTitle(activeFilter.month)} 선택 시 해당 월 강조`;
   byId('element-chart-subtitle').textContent = `${yearTitle(activeFilter.year - 1)} 대비 ${monthTitle(activeFilter.month)} · 금액 기준`;
   byId('detail-subtitle').textContent = `${yearTitle(activeFilter.year - 1)} 대비 ${yearTitle(activeFilter.year)} · ${monthTitle(activeFilter.month)} · 증감액 순`;

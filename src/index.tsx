@@ -78,7 +78,7 @@ app.get('/', (c) => c.html(`
             <div class="table-scroll"><table><thead><tr><th>코스트센터</th><th class="numeric">전년 금액</th><th class="numeric">기준연도 금액</th><th class="numeric">증감액</th><th>상태</th></tr></thead><tbody id="center-table-body"></tbody></table></div>
           </section>
 
-          <footer class="page-footer"><span>분석 데이터는 거래내역의 정산년월·계정명·거래금액을 기준으로 집계했습니다.</span><span>거래 건수 기준 <b id="record-count">—</b>건</span></footer>
+          <footer class="page-footer"><span>분석 데이터는 거래내역의 정산년월·계정명·거래금액을 기준으로 집계했습니다.</span><span id="excluded-note" class="excluded-note"></span><span>거래 건수 기준 <b id="record-count">—</b>건</span></footer>
         </main>
       </div>
     </body>
