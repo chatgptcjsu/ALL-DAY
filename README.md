@@ -1,21 +1,49 @@
-```txt
-npm install
-npm run dev
-```
+# 소모품 원가 트렌드
 
-```txt
-npm run deploy
-```
+## 프로젝트 개요
+- **목표**: 2024~2025년 소모품 거래 데이터를 연도·월·코스트센터·원가요소 기준으로 비교합니다.
+- **주요 기능**: 연도 및 월 필터, 코스트센터 필터, 원가요소 검색, 월별 추이 차트, 원가요소 증감 차트, 신규·미사용 항목 표시, 상세 비교표.
+- **기술 구성**: Hono + TypeScript + Cloudflare Pages, Chart.js.
 
-[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
+## 데이터 및 집계 기준
+- **원본 파일**: `소모품 거래내역_24년~25년_251227 발송.xlsx`의 `RAW` 시트.
+- **기간**: 2024년 1월~2025년 12월.
+- **코스트센터**: `비용이체부서명`을 사용하고, 값이 없으면 `부서명`으로 대체합니다.
+- **원가요소명**: `계정명`을 사용하며 공란은 `미분류 원가요소`로 표시합니다.
+- **금액 및 기간**: `거래금액`을 `정산년월` 기준으로 집계합니다.
+- **개인정보 최소화**: 브라우저에는 월·코스트센터·원가요소별 합계와 거래 건수만 포함하며, 주문자·주문번호·상품 상세는 포함하지 않습니다.
+- **저장 방식**: 정적 집계 파일 `public/static/data.json`; D1 등 원격 저장소를 사용하지 않습니다.
 
-```txt
+## 주요 경로
+- `/` — 원가 분석 대시보드
+- `/static/data.json` — 집계 데이터(JSON)
+- `/static/dashboard.js` — 필터 및 차트 동작
+- `/static/style.css` — 화면 스타일
+
+## 사용 방법
+1. 연도를 선택해 전년 대비 기준을 정합니다.
+2. 전체 합계 또는 특정 월을 선택합니다.
+3. 코스트센터를 선택하면 KPI와 추이·원가요소 비교가 해당 센터 기준으로 바뀝니다.
+4. 원가요소 검색으로 상세 항목을 좁힙니다.
+5. 그래프의 데이터에 마우스를 올리면 금액, 전년 값, 기준연도 값 등을 확인할 수 있습니다.
+6. 원가요소와 코스트센터 표에서 신규·미사용 여부와 증감액을 확인합니다.
+
+## 개발 및 배포
+- **로컬 미리보기**: `npm run build` 후 `npx wrangler pages dev dist --ip 0.0.0.0 --port 3000`
+- **배포 상태**: 로컬 미리보기 검증 완료. 프로덕션 배포는 하지 않았습니다.
+- **보안 유의사항**: `data.json`은 정적 공개 파일입니다. 실제 배포 전, 원가정보를 공개해도 되는지 검토하고 필요하면 접근 제한 또는 인증을 설정해야 합니다.
+- **미구현**: 웹에서 엑셀을 업로드해 집계를 갱신하는 기능, 인증/권한 관리, D1 동적 저장.
+- **다음 단계**: 데이터 갱신 업로드 도구가 필요하면 집계 흐름을 추가하고, 배포가 필요하면 공개 범위와 배포 경로를 먼저 결정합니다.
+
+## GitHub
+- **저장소**: https://github.com/chatgptcjsu/ALL-DAY
+- **기본 브랜치**: `main`
+- **프로덕션 URL**: 미배포
+
+## 원본 파일 업데이트 방법
+원본 파일을 변경한 경우 `public/static/data.json` 집계를 다시 생성해야 합니다. 원본의 `RAW` 시트에서 월·비용이체부서명/부서명·계정명·거래금액 필드를 사용합니다.
+
+## Cloudflare 타입 생성
+```bash
 npm run cf-typegen
-```
-
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
-
-```ts
-// src/index.ts
-const app = new Hono<{ Bindings: CloudflareBindings }>()
 ```
